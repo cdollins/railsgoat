@@ -8,7 +8,7 @@
       var hashParam = location.hash.split("#")[1];
       var paramName = hashParam.split('=')[0];
       var paramValue = hashParam.split('=')[1];
-      document.write("<OPTION value=3>" + paramValue + "</OPTION>");
+      document.write("<OPTION value=3>" + hoganEscape(paramValue) + "</OPTION>");
     } catch(err) {
     }
     //document.write("</select>");
