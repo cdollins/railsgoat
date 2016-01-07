@@ -6,10 +6,7 @@ class Api::V1::UsersController < ApplicationController
   respond_to :json
 
   def index
-    # We removed the .as_json code from the model, just seemed like extra work.
-    # dunno, maybe useful at a later time?
-    #respond_with @user.admin ? User.all.as_json : @user.as_json
-    respond_with @user.admin ? User.all : @user
+    respond_with @user.admin ? User.all.as_json : @user.as_json
   end
 
   def show
@@ -29,7 +26,7 @@ class Api::V1::UsersController < ApplicationController
     # We've had issues with URL encoding, etc. causing issues so just to be safe
     # we will go ahead and unescape the user's token
     unescape_token(token)
-    @clean_token =~ /(.*?)-(.*)/
+    @clean_token =~ /\A(.*?)-(.*)\z/
     id = $1
     hash = $2
     (id && hash) ? true : false
