@@ -1,19 +1,18 @@
 require 'encryption'
 
 class User < ActiveRecord::Base
+  has_secure_password
+
   attr_accessible :email, :admin, :first_name, :last_name, :user_id, :password, :password_confirmation
-  validates :password, :presence => true,
-                        :confirmation => true,
-                        :if => :password,
-                        :format => {:with => /\A.*(?=.{10,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\@\#\$\%\^\&\+\=]).*\z/}
+  validates :password, 
+            :format => {:with => /\A.*(?=.{10,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\@\#\$\%\^\&\+\=]).*\z/}
 
   validates_presence_of :email
   validates_uniqueness_of :email
   validates_format_of :email, :with => /.+@.+\..+/i
   attr_accessor :skip_user_id_assign
-  attr_accessor :skip_hash_password
   before_save :assign_user_id, :on => :create
-  before_save :hash_password
+
   has_one :retirement, :foreign_key => :user_id, :primary_key => :user_id, :dependent => :destroy
   has_one :paid_time_off, :foreign_key => :user_id, :primary_key => :user_id, :dependent => :destroy
   has_one :work_info, :foreign_key => :user_id, :primary_key => :user_id, :dependent => :destroy
@@ -47,7 +46,7 @@ class User < ActiveRecord::Base
   # More secure version, still lacking a decent hashing routine, this is for timing attack prevention
   def self.authenticate(email, password)
        user = find_by_email(email) || User.new(:password => "")
-        if Rack::Utils.secure_compare(user.password, Digest::MD5.hexdigest(password))
+        if user.authenticate(password)
           return user
         else
           raise "Incorrect username or password"
