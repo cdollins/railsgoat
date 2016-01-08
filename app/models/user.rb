@@ -72,7 +72,7 @@ class User < ActiveRecord::Base
 
   def generate_token(column)
     begin
-      self[column] = Encryption.encrypt_sensitive_value(self.user_id)
+      self[column] = Encryption.encrypt_sensitive_value(self.user_id, true)
     end while User.exists?(column => self[column])
   end
 end
