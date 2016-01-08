@@ -3,7 +3,7 @@ require 'encryption'
 class User < ActiveRecord::Base
   has_secure_password
 
-  attr_accessible :email, :admin, :first_name, :last_name, :user_id, :password, :password_confirmation
+  attr_accessible :email, :first_name, :last_name, :user_id, :password, :password_confirmation
   validates :password, 
             :format => {:with => /\A.*(?=.{10,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\@\#\$\%\^\&\+\=]).*\z/}
 

@@ -25,19 +25,11 @@ class UsersController < ApplicationController
 
   def update
     message = false
-    #Safest
-    # user = current_user
+    user = current_user
 
-    # Still an Insecure DoR vulnerability
-    #user = User.find(:first, :conditions => ["user_id = ?", "#{params[:user][:user_id]}"])
-
-    user = User.find(:first, :conditions => ["user_id = ?", params[:user][:user_id]])
     if user
-      user.skip_user_id_assign = true
-      user.skip_hash_password = true
       user.update_attributes(params[:user].reject { |k| %w(password password_confirmation user_id).include? k })
       if !(params[:user][:password].empty?) && (params[:user][:password] == params[:user][:password_confirmation])
-        user.skip_hash_password = false
         user.password = params[:user][:password]
       end
       message = true if user.save!
