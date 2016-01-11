@@ -265,9 +265,9 @@ paid_time_off = [
 
 
 users.each do |user_info|
-  user = User.new(user_info.reject {|k| k == :user_id })
+  user = User.new(user_info.reject {|k| k == :user_id }, :without_protection => true)
   user.user_id = user_info[:user_id]
-  user.save
+  user.save(:validate => false)
 end
 
 retirements.each do |r|
