@@ -15,8 +15,8 @@ feature 'sql injection' do
     visit "/users/#{@normal_user.user_id}/account_settings"
     within('#account_edit') do
       fill_in 'Email', :with => 'joe.admin@schmoe.com'
-      fill_in 'user_password', :with => 'hacketyhack'
-      fill_in 'user_password_confirmation', :with => 'hacketyhack'
+      fill_in 'user_password', :with => 'H@ack3tyHack'
+      fill_in 'user_password_confirmation', :with => 'H@ack3tyHack'
 
       # this is a hidden field, so cannot use fill_in to access it.
       find(:xpath, "//input[@id='user_user_id']", :visible => false).set "8' OR admin='t') --"
