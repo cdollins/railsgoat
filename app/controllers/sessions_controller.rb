@@ -12,8 +12,10 @@ class SessionsController < ApplicationController
     begin
      if params[:url].present?
       path = URI.parse(params[:url]).path
+      Rails.application.routes.recognize_path(path) # raises if invalid
      end
     rescue
+      path = home_dashboard_index_path
     end
 
     begin
